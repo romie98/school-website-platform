@@ -97,9 +97,11 @@ export function AuditCard({
       <p className="mt-1 text-sm text-muted">{event.resourceLabel}</p>
       {event.resourceName && <p className="text-sm font-medium text-brand">{event.resourceName}</p>}
       {showSchool && event.schoolName && <p className="mt-1 text-xs text-muted">{event.schoolName}</p>}
-      {event.metadata?.submittedByName && event.action !== 'CHANGE_SUBMITTED' && (
-        <p className="mt-2 text-sm text-muted">{String(event.metadata.submittedByName)} submitted the change.</p>
-      )}
+      {Boolean(event.metadata?.submittedByName) && event.action !== 'CHANGE_SUBMITTED' && (
+  <p className="mt-2 text-sm text-muted">
+    {String(event.metadata?.submittedByName)} submitted the change.
+  </p>
+)}
       <ChangeDiff event={event} />
       {event.declineReason && (
         <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-800">

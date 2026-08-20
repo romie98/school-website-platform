@@ -1,3 +1,5 @@
+import { API_BASE_URL } from '@/config/api'
+
 const TOKEN_KEY = 'bahs-jwt'
 const USER_KEY = 'bahs-jwt-user'
 
@@ -93,7 +95,7 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (token) headers.set('Authorization', `Bearer ${token}`)
   const slug = tenantSlugFromLocation()
   if (slug && path.startsWith('/public')) headers.set('X-Tenant-Slug', slug)
-  const response = await fetch(`/api${path}`, { ...init, headers })
+  const response = await fetch(`${API_BASE_URL}/api${path}`, { ...init, headers })
   if (!response.ok) {
     let message = 'Request failed'
     let detail: unknown

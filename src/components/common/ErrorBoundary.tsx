@@ -1,10 +1,11 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { API_BASE_URL } from '@/config/api'
 import { currentSessionUser, getToken } from '@/services/api'
 
 async function reportFrontendError(error: Error, info?: ErrorInfo) {
   if (!getToken()) return
   try {
-    await fetch('/api/ops/client-error', {
+    await fetch(`${API_BASE_URL}/api/ops/client-error`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
