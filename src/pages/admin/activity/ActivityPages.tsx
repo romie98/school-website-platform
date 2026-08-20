@@ -83,6 +83,11 @@ export function AuditCard({
   showSchool?: boolean
   onViewDetails?: (event: AuditEvent) => void
 }) {
+  const submittedByName =
+    typeof event.metadata?.submittedByName === 'string'
+      ? event.metadata.submittedByName
+      : null
+
   return (
     <article className="rounded-lg bg-white p-4 shadow-[var(--shadow-card)]">
       <p className="text-xs text-muted">{formatAuditWhen(event.createdAt)}</p>
@@ -97,13 +102,13 @@ export function AuditCard({
       <p className="mt-1 text-sm text-muted">{event.resourceLabel}</p>
       {event.resourceName && <p className="text-sm font-medium text-brand">{event.resourceName}</p>}
       {showSchool && event.schoolName && <p className="mt-1 text-xs text-muted">{event.schoolName}</p>}
-      {typeof event.metadata?.submittedByName === 'string' &&
-  event.metadata.submittedByName.trim() !== '' &&
-  event.action !== 'CHANGE_SUBMITTED' && (
-    <p className="mt-2 text-sm text-muted">
-      {event.metadata.submittedByName} submitted the change.
-    </p>
-  )}
+      {submittedByName &&
+        submittedByName.trim() !== '' &&
+        event.action !== 'CHANGE_SUBMITTED' && (
+          <p className="mt-2 text-sm text-muted">
+            {submittedByName} submitted the change.
+          </p>
+        )}
       <ChangeDiff event={event} />
       {event.declineReason && (
         <p className="mt-3 rounded-md bg-red-50 px-3 py-2 text-sm text-red-800">
