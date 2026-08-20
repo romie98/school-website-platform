@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Bel-Air High School crest">
+  <circle cx="100" cy="100" r="98" fill="#0B3D2E"/>
+  <circle cx="100" cy="100" r="93" fill="none" stroke="#FFD100" stroke-width="3.5"/>
+  <circle cx="100" cy="100" r="86" fill="none" stroke="#FFD100" stroke-width="1"/>
+  <path d="M100 18 C 128 38, 156 42, 178 46 C 170 92, 148 132, 100 168 C 52 132, 30 92, 22 46 C 44 42, 72 38, 100 18 Z" fill="#F5F7F5" stroke="#FFD100" stroke-width="2.2"/>
+  <path d="M100 26 C 124 44, 148 48, 168 51 C 161 92, 142 126, 100 156 C 58 126, 39 92, 32 51 C 52 48, 76 44, 100 26 Z" fill="#0B3D2E"/>
+  <rect x="46" y="48" width="108" height="22" rx="2" fill="#FFD100"/>
+  <text x="100" y="64" text-anchor="middle" fill="#0B3D2E" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5">EST. 1968</text>
+  <g fill="none" stroke="#FFD100" stroke-width="1.8" stroke-linecap="round">
+    <path d="M78 86 h44"/>
+    <path d="M82 90 h36"/>
+    <path d="M74 86 v18 h52 v-18"/>
+    <path d="M74 104 c8 8 18 12 26 12 s18-4 26-12"/>
+  </g>
+  <path d="M100 78 l-3 10 h6 z" fill="#FFD100"/>
+  <circle cx="100" cy="76" r="3.2" fill="#FFD100"/>
+  <path d="M70 118 c8 10 18 8 30 0 c12 8 22 10 30 0" fill="none" stroke="#FFD100" stroke-width="1.6"/>
+  <path d="M78 128 c14 8 30 8 44 0" fill="none" stroke="#FFD100" stroke-width="1.4"/>
+  <circle cx="88" cy="116" r="3" fill="#FFD100"/>
+  <circle cx="112" cy="116" r="3" fill="#FFD100"/>
+  <path d="M91 116 h18" stroke="#FFD100" stroke-width="1.6"/>
+  <path d="M28 168 h144 l-10 18 H38 z" fill="#FFD100"/>
+  <text x="100" y="181" text-anchor="middle" fill="#0B3D2E" font-family="Montserrat, Arial, sans-serif" font-size="7.2" font-weight="700" letter-spacing="0.4">UNITY � FRIENDSHIP � KNOWLEDGE</text>
+</svg>
