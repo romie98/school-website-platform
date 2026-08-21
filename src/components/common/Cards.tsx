@@ -1,5 +1,5 @@
 import type { NewsArticle, SchoolEvent, StaffMember, Department, ResourceItem, QuickLink } from '@/types'
-import { Link } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { ArrowRight, FileText, Download, Clock, MapPin } from 'lucide-react'
 import { formatDate, formatShortDate } from '@/utils'
 import { NamedIcon } from '@/components/common/NamedIcon'

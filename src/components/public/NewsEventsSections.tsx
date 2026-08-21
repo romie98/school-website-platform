@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { ArrowRight, Clock, MapPin } from 'lucide-react'
 import { SectionHeader } from '@/components/common/SectionHeader'
 import { NewsCard, EventCard } from '@/components/common/Cards'

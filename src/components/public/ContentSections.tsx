@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { ArrowRight, FileText, Quote } from 'lucide-react'
 import { Button } from '@/components/common/Button'
 import { SectionHeader } from '@/components/common/SectionHeader'
@@ -427,7 +427,7 @@ export function DocumentsSection({ items, variant }: { items: ResourceItem[]; va
               <div>
                 <h3 className="font-display font-bold text-brand">{item.name}</h3>
                 <p className="text-sm text-muted">{item.category}</p>
-                {item.href ? <a href={item.href} className="mt-2 inline-block text-sm font-semibold text-gold-dark">View</a> : null}
+                {item.href ? <Link to={item.href} className="mt-2 inline-block text-sm font-semibold text-gold-dark">View</Link> : null}
               </div>
             </article>
           ))}

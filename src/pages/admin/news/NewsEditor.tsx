@@ -10,7 +10,8 @@ import { useToast } from '@/components/admin/Toast'
 import { storeMediaFile } from '@/services/mediaService'
 import { mediaLibraryService } from '@/services/collections'
 import { submitLabel } from '@/services/approvals'
-import { canPublishDirectly } from '@/services/api'
+import { canPublishDirectly, currentSessionUser } from '@/services/api'
+import { withCurrentTenant } from '@/utils/tenantLink'
 
 const categories: NewsCategory[] = ['Academic', 'Sports', 'Events', 'Achievements', 'Student Life', 'Community', 'Announcements', 'General']
 
@@ -100,7 +101,7 @@ export function NewsEditor() {
           <button type="button" className="rounded-md border border-brand/20 px-4 py-2 text-sm" onClick={() => persist('draft')}>Save draft</button>
           <button type="button" className="rounded-md border border-brand/20 px-4 py-2 text-sm" onClick={async () => {
             const ok = await persist()
-            if (ok) window.open(`/news/${form.slug || uniqueSlug(form.title, [], form.id)}?preview=1`, '_blank')
+            if (ok) window.open(withCurrentTenant(`/news/${form.slug || uniqueSlug(form.title, [], form.id)}?preview=1`, currentSessionUser()?.school_slug), '_blank')
           }}>Preview</button>
           <button type="button" className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-brand-dark" onClick={() => persist(existing?.status === 'published' ? 'published' : 'published')}>
             {submitLabel()}

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { Mail, Phone, Clock, MapPin } from 'lucide-react'
 import { FacebookIcon, InstagramIcon, YoutubeIcon } from '@/components/common/SocialIcons'
 import { SchoolCrest } from '@/components/common/SchoolCrest'

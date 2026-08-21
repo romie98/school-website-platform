@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { X } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import type { Announcement } from '@/types'
 
 export function AnnouncementBar({ announcement }: { announcement?: Announcement }) {

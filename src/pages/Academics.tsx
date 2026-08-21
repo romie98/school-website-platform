@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { PageMeta } from '@/components/common/PageMeta'
 import { PageHero, CTASection } from '@/components/common/PageBits'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'

@@ -4,6 +4,7 @@ import { api, currentSessionUser, rememberDevTenant, storedDevTenant } from '@/s
 import { hydrateFromRemote, getContent, clearContentMemory } from '@/services/content'
 import { seed } from '@/data/seed'
 import { allowSeedFallback } from '@/config/contentSource'
+import { allowTenantQuery } from '@/config/tenantQuery'
 import { applyTheme } from '@/themes/applyTheme'
 import type { TenantBundle, TenantSchool, TenantSettings, TenantTheme } from '@/types/tenant'
 
@@ -52,11 +53,9 @@ export function TenantProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
   const [errorStatus, setErrorStatus] = useState<number | null>(null)
   const onAdminCms = isAdminCmsPath(location.pathname)
-  const allowTenantQuery =
-    import.meta.env.DEV ||
-    import.meta.env.VITE_ALLOW_TENANT_QUERY === 'true'
+  const allowTenantQueryParam = allowTenantQuery()
 
-  const tenantFromUrl = allowTenantQuery
+  const tenantFromUrl = allowTenantQueryParam
     ? new URLSearchParams(location.search).get('tenant')
     : null
   const tenantSlug = tenantFromUrl || storedDevTenant()

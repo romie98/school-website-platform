@@ -6,6 +6,8 @@ import { useContent } from '@/hooks/useContent'
 import { newsService, writeMessage, conflictText } from '@/services/collections'
 import { formatDate } from '@/utils'
 import { useToast } from '@/components/admin/Toast'
+import { currentSessionUser } from '@/services/api'
+import { withCurrentTenant } from '@/utils/tenantLink'
 import { mediaUrl } from '@/services/normalize'
 import { deleteConfirmCopy } from '@/services/approvals'
 
@@ -78,7 +80,7 @@ export function NewsList() {
                         { label: 'View', onClick: () => navigate(`/admin/news/${article.id}`) },
                         { label: 'Edit', onClick: () => navigate(`/admin/news/${article.id}/edit`) },
                         { label: 'View history', onClick: () => navigate(`/admin/activity/resource/news/${article.id}`) },
-                        { label: 'Preview', onClick: () => window.open(`/news/${article.slug}?preview=1`, '_blank') },
+                        { label: 'Preview', onClick: () => window.open(withCurrentTenant(`/news/${article.slug}?preview=1`, currentSessionUser()?.school_slug), '_blank') },
                         { label: 'Duplicate', onClick: async () => {
                           try {
                             const result = await newsService.duplicate(article.id)

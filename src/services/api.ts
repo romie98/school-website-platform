@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/config/api'
+import { allowTenantQuery } from '@/config/tenantQuery'
 
 const TOKEN_KEY = 'bahs-jwt'
 const USER_KEY = 'bahs-jwt-user'
@@ -48,7 +49,7 @@ export function storedDevTenant() {
 }
 
 export function tenantSlugFromLocation() {
-  if (!import.meta.env.DEV) return null
+  if (typeof window === 'undefined' || !allowTenantQuery()) return null
   return new URLSearchParams(window.location.search).get('tenant') || storedDevTenant()
 }
 

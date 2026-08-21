@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { PageMeta } from '@/components/common/PageMeta'
 import { PageHero } from '@/components/common/PageBits'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'

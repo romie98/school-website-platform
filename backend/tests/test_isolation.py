@@ -170,6 +170,7 @@ def test_suspended_school_blocks_admin(client, db):
 def test_production_ignores_tenant_query(client, monkeypatch):
     class ProdSettings:
         is_development = False
+        allow_tenant_query_override = False
         platform_domain = "schoolplatform.com"
         default_tenant_slug = "belair-high"
 
@@ -182,6 +183,36 @@ def test_production_ignores_tenant_query(client, monkeypatch):
     )
     assert res.status_code == 200
     assert res.json()["school"]["slug"] == "belair-high"
+
+
+def test_staging_tenant_query_override_is_opt_in(client, monkeypatch):
+    class StagingSettings:
+        is_development = False
+        allow_tenant_query_override = True
+        platform_domain = "schoolplatform.com"
+        default_tenant_slug = "belair-high"
+
+    monkeypatch.setattr("app.dependencies.tenant.get_settings", lambda: StagingSettings())
+    monkeypatch.setattr("app.services.tenant_service.get_settings", lambda: StagingSettings())
+    res = client.get(
+        "/api/public/site",
+        params={"tenant": "demo-academy"},
+        headers={"Host": "belairhigh.edu.jm"},
+    )
+    assert res.status_code == 200
+    assert res.json()["school"]["slug"] == "demo-academy"
+
+
+def test_forwarded_host_takes_precedence_over_host(client):
+    res = client.get(
+        "/api/public/site",
+        headers={
+            "Host": "belairhigh.edu.jm",
+            "X-Forwarded-Host": "manchesterhigh.edu.jm",
+        },
+    )
+    assert res.status_code == 200
+    assert res.json()["school"]["slug"] == "manchester-high"
 
 
 def test_school_admin_cannot_assign_super_admin(client):

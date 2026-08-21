@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { useParams, Link, useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { Clock, MapPin, CalendarDays } from 'lucide-react'
 import { PageMeta } from '@/components/common/PageMeta'
 import { PageHero, FilterTabs, EmptyState, Pagination } from '@/components/common/PageBits'

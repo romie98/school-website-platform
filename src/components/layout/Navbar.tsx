@@ -1,5 +1,6 @@
 import { useEffect, useId, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { TenantLink as Link, TenantNavLink as NavLink } from '@/components/common/TenantLink'
 import { ChevronDown, Menu, X } from 'lucide-react'
 import { SchoolCrest } from '@/components/common/SchoolCrest'
 import { Button } from '@/components/common/Button'

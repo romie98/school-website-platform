@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { TenantLink as Link } from '@/components/common/TenantLink'
 import { ChevronRight } from 'lucide-react'
 
 interface BreadcrumbsProps {
