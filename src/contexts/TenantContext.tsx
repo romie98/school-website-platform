@@ -51,7 +51,13 @@ export function TenantProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null)
   const [errorStatus, setErrorStatus] = useState<number | null>(null)
   const onAdminCms = isAdminCmsPath(location.pathname)
-  const tenantFromUrl = import.meta.env.DEV ? new URLSearchParams(location.search).get('tenant') : null
+  const allowTenantQuery =
+    import.meta.env.DEV ||
+    import.meta.env.VITE_ALLOW_TENANT_QUERY === 'true'
+
+  const tenantFromUrl = allowTenantQuery
+    ? new URLSearchParams(location.search).get('tenant')
+    : null
   const tenantSlug = tenantFromUrl || storedDevTenant()
 
   const refresh = useCallback(async () => {
