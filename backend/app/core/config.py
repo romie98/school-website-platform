@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
     platform_domain: str = "schoolplatform.com"
     default_tenant_slug: str = "belair-high"
+    allow_tenant_query_override: bool = False
     storage_provider: str = "local"
     storage_bucket: str = ""
     storage_dir: str = "./storage"

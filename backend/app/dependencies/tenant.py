@@ -15,19 +15,35 @@ def current_school(
     tenant: str | None = Query(default=None),
 ) -> School:
     settings = get_settings()
-    slug = None
-    if settings.is_development:
-        slug = x_tenant_slug or tenant
-    host = request.headers.get("host") or request.headers.get("x-forwarded-host")
+
+    allow_override = (
+        settings.is_development
+        or settings.allow_tenant_query_override
+    )
+
+    slug = (x_tenant_slug or tenant) if allow_override else None
+
+    host = request.headers.get("x-forwarded-host") or request.headers.get("host")
+
     try:
         school = resolve_tenant(
             db,
             hostname=host,
             slug=slug,
-            allow_dev_override=settings.is_development,
+            allow_dev_override=allow_override,
         )
         assert_school_public(school)
-        loaded = db.scalar(select(School).options(joinedload(School.settings)).where(School.id == school.id))
+
+        loaded = db.scalar(
+            select(School)
+            .options(joinedload(School.settings))
+            .where(School.id == school.id)
+        )
+
         return loaded or school
+
     except TenantResolutionError as exc:
-        raise HTTPException(status_code=exc.status_code, detail=exc.message) from exc
+        raise HTTPException(
+            status_code=exc.status_code,
+            detail=exc.message,
+        ) from exc
