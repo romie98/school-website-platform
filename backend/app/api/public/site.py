@@ -58,7 +58,7 @@ def public_tenants(db: Session = Depends(get_db)):
 
 @router.get("/site")
 def public_site(school: School = Depends(current_school), db: Session = Depends(get_db)):
-    return assemble_site(school, school.settings, load_tenant_rows(db, school.id))
+    return assemble_site(school, school.settings, load_tenant_rows(db, school.id), public=True)
 
 
 @router.get("/news")

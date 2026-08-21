@@ -91,13 +91,34 @@ def staff_to_public(row: StaffMember) -> dict:
     }
 
 
-def assemble_site(school: School, settings: SchoolSettings | None, rows: dict) -> dict:
+def assemble_site(school: School, settings: SchoolSettings | None, rows: dict, *, public: bool = False) -> dict:
     bundle = loads(rows["bundle"].payload) if rows.get("bundle") else {}
     flags = parse_flags(school.feature_flags)
     theme = build_theme(school, settings)
-    albums = []
+    news = list(rows.get("news", []))
+    events = list(rows.get("events", []))
+    staff = list(rows.get("staff", []))
+    departments = list(rows.get("departments", []))
+    announcements = list(rows.get("announcements", []))
+    documents = list(rows.get("documents", []))
+    albums = list(rows.get("albums", []))
+    pages = list(rows.get("pages", []))
+    if public:
+        news = [item for item in news if item.status == "published"]
+        events = [item for item in events if item.status in {"published", "completed"}]
+        staff = [
+            item
+            for item in staff
+            if item.status == "active" and loads(item.payload).get("displayOnWebsite", True)
+        ]
+        departments = [item for item in departments if item.status in {"active", "published"}]
+        announcements = [item for item in announcements if item.active]
+        documents = [item for item in documents if item.status == "published"]
+        albums = [item for item in albums if item.status == "published"]
+        pages = [item for item in pages if item.status == "published"]
+    album_payloads = []
     gallery = []
-    for album in rows.get("albums", []):
+    for album in albums:
         extra = loads(album.payload)
         images = [
             {
@@ -110,7 +131,7 @@ def assemble_site(school: School, settings: SchoolSettings | None, rows: dict) -
             }
             for img in album.images
         ]
-        albums.append(
+        album_payloads.append(
             {
                 "id": album.id,
                 "slug": album.slug,
@@ -124,14 +145,14 @@ def assemble_site(school: School, settings: SchoolSettings | None, rows: dict) -
 
     content = {
         **bundle,
-        "news": [news_to_public(item) for item in rows.get("news", [])],
-        "events": [event_to_public(item) for item in rows.get("events", [])],
-        "staff": [staff_to_public(item) for item in rows.get("staff", [])],
-        "departments": [{**loads(d.payload), "id": d.id, "slug": d.slug, "name": d.name, "status": d.status} for d in rows.get("departments", [])],
-        "announcements": [{**loads(a.payload), "id": a.id, "title": a.title, "message": a.message, "active": a.active} for a in rows.get("announcements", [])],
-        "albums": albums,
+        "news": [news_to_public(item) for item in news],
+        "events": [event_to_public(item) for item in events],
+        "staff": [staff_to_public(item) for item in staff],
+        "departments": [{**loads(d.payload), "id": d.id, "slug": d.slug, "name": d.name, "status": d.status} for d in departments],
+        "announcements": [{**loads(a.payload), "id": a.id, "title": a.title, "message": a.message, "active": a.active} for a in announcements],
+        "albums": album_payloads,
         "gallery": gallery,
-        "resources": [{**loads(d.payload), "id": d.id, "name": d.name, "status": d.status} for d in rows.get("documents", [])],
+        "resources": [{**loads(d.payload), "id": d.id, "name": d.name, "status": d.status} for d in documents],
         "mediaLibrary": [
             {
                 "id": m.id,
@@ -188,5 +209,5 @@ def assemble_site(school: School, settings: SchoolSettings | None, rows: dict) -
         "navigation": bundle.get("navigation", DEFAULT_NAV),
         "homepage_sections": sections,
         "content": content,
-        "pages": {p.slug: {**loads(p.body), "id": p.id, "title": p.title, "slug": p.slug} for p in rows.get("pages", [])},
+        "pages": {p.slug: {**loads(p.body), "id": p.id, "title": p.title, "slug": p.slug} for p in pages},
     }

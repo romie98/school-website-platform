@@ -1,3 +1,8 @@
+/**
+ * Local/demo/test content only.
+ * Staging and production websites must load from GET /api/public/site (PostgreSQL),
+ * never from this file.
+ */
 import { photos } from './images'
 import { upgradeSite } from '@/services/normalize'
 

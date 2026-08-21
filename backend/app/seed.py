@@ -12,9 +12,9 @@ from app.models.school import School, SchoolDomain, SchoolSettings, Subscription
 from app.models.user import PRINCIPAL, SCHOOL_ADMIN, SUPER_ADMIN, User
 from app.services.feature_service import DEFAULT_FEATURES
 from app.services.platform_service import ensure_default_plans
+from app.seed_belair import BELAIR, ensure_belair
 from app.util.jsonutil import dumps, loads
 
-BELAIR = "11111111-1111-1111-1111-111111111111"
 MANCHESTER = "22222222-2222-2222-2222-222222222222"
 DEMO = "33333333-3333-3333-3333-333333333333"
 
@@ -455,120 +455,7 @@ def apply_christiana_sky(db: Session) -> None:
 
 
 def seed(db: Session) -> None:
-    if db.get(School, BELAIR) is None:
-        plan = db.get(SubscriptionPlan, "plan-professional")
-        if plan is None:
-            plan = SubscriptionPlan(id="plan-professional", name="Professional", slug="professional", max_admins=10, max_storage_mb=5120)
-            db.add(plan)
-            db.flush()
-        db.add(
-            School(
-                id=BELAIR,
-                name="Bel-Air High School",
-                slug="belair-high",
-                domain="belair.schoolplatform.com",
-                custom_domain="belairhigh.edu.jm",
-                primary_color="#0B3D2E",
-                secondary_color="#FFD100",
-                accent_color="#145C45",
-                theme="classic",
-                status="active",
-                subscription_plan_id=plan.id,
-                subscription_status="active",
-                feature_flags=_flags(),
-            )
-        )
-        db.flush()
-        db.add(SchoolDomain(school_id=BELAIR, domain="belairhigh.edu.jm", is_primary=True, verified=True))
-        db.add(SchoolDomain(school_id=BELAIR, domain="belair.schoolplatform.com", is_primary=False, verified=True))
-        db.add(
-            SchoolSettings(
-                school_id=BELAIR,
-                school_name="Bel-Air High School",
-                short_name="Bel-Air",
-                motto="Unity Through Friendship and Knowledge",
-                primary_color="#0B3D2E",
-                secondary_color="#FFD100",
-                accent_color="#145C45",
-                heading_font="Montserrat",
-                body_font="Inter",
-                principal_name="Dr Donnalyn King",
-                address="43 deCarteret Road, Mandeville, Manchester, Jamaica",
-                phone="(876) 962-0216",
-                email="general@belairhighschoolja.com",
-                contact_json=dumps({
-                    "schoolName": "Bel-Air High School",
-                    "addressLines": ["43 deCarteret Road", "Mandeville", "Manchester, Jamaica"],
-                    "phone": ["(876) 962-0216", "(876) 962-2168"],
-                    "email": ["general@belairhighschoolja.com", "admissions@belairhighschoolja.com"],
-                    "officeHours": "Monday to Friday, 8:00 a.m. – 3:30 p.m.",
-                    "mapEmbedUrl": "https://maps.google.com/maps?q=43%20deCarteret%20Road%20Mandeville%20Jamaica&t=&z=16&ie=UTF8&iwloc=&output=embed",
-                    "social": [
-                        {"platform": "Facebook", "href": "https://www.facebook.com", "enabled": True},
-                        {"platform": "Instagram", "href": "https://www.instagram.com", "enabled": True},
-                        {"platform": "YouTube", "href": "https://www.youtube.com", "enabled": True},
-                    ],
-                }),
-                branding_json=dumps({
-                    "schoolName": "Bel-Air High School",
-                    "motto": "Unity Through Friendship and Knowledge",
-                    "primaryColor": "#0B3D2E",
-                    "secondaryColor": "#FFD100",
-                    "accentColor": "#145C45",
-                }),
-            )
-        )
-        db.add(NewsArticle(
-            id="n-belair-1", school_id=BELAIR, slug="dacosta-cup-round-of-32",
-            title="Footballers first through to daCosta Cup round of 32",
-            excerpt="Bel-Air completed a seven-match winning run with a 5–1 result against Mount St Joseph.",
-            content="<p>Bel-Air High became the first school to qualify for the ISSA/Wata daCosta Cup round of 32.</p>",
-            category="Sports", author="Sports Department", date="2026-08-03",
-            status="published", is_featured=True, show_on_homepage=True, featured_priority=1,
-        ))
-        db.add(NewsArticle(
-            id="n-belair-2", school_id=BELAIR, slug="grade-11-mock-examinations",
-            title="Grade 11 mock examinations begin Monday",
-            excerpt="Candidates should arrive in full uniform with the published timetable.",
-            content="<p>Grade 11 mock examinations begin on Monday under examination conditions.</p>",
-            category="Announcements", author="Examination Centre", date="2026-08-10",
-            status="published", show_on_homepage=True,
-        ))
-        db.add(Event(
-            id="e-belair-1", school_id=BELAIR, slug="sports-day", title="Sports Day",
-            description="Inter-house track and field at Bel-Air High School.",
-            date="2026-10-02", status="published",
-            payload=dumps({"startTime": "8:30 a.m.", "location": "School field", "category": "Sports", "showOnHomepage": True, "featured": True, "allDay": False}),
-        ))
-        db.add(StaffMember(
-            id="s-belair-1", school_id=BELAIR, name="Dr Donnalyn King", role="Principal",
-            department="Administration", status="active",
-            payload=dumps({"email": "principal@belairhighschoolja.com", "administration": True, "displayOnWebsite": True, "honorific": "Dr.", "firstName": "Donnalyn", "lastName": "King"}),
-        ))
-        db.add(Page(school_id=BELAIR, slug="about", title="About", body=dumps({"overview": ["Bel-Air High School is a co-educational secondary school in Mandeville, established in 1968."]})))
-        db.add(SiteBundle(school_id=BELAIR, payload=dumps({
-            "homepage": {
-                "heroEyebrow": "Mandeville, Manchester · Established 1968",
-                "heroTitle": "Bel-Air High School",
-                "heroTagline": "Excellence. Integrity. Responsibility. Respect.",
-                "welcomeTitle": "Welcome to Bel-Air High School",
-                "welcomeBody": ["Bel-Air High School is a co-educational secondary school in the hills of Mandeville."],
-                "primaryButtonLabel": "Explore Our School",
-                "primaryButtonUrl": "/about",
-                "secondaryButtonLabel": "Admissions",
-                "secondaryButtonUrl": "/admissions",
-            },
-            "principal": {"name": "Dr Donnalyn King", "title": "Principal", "excerpt": "Welcome to Bel-Air High School.", "content": "<p>It is my privilege to welcome you to Bel-Air High School.</p>", "paragraphs": [], "signature": "Dr Donnalyn King", "photo": "", "messageTitle": "Welcome to Bel-Air High School"},
-            "houses": [],
-            "clubs": [],
-            "sports": [],
-            "programmes": [],
-            "quickLinks": [],
-            "statistics": [{"id": "st-1", "label": "Students", "value": 860, "suffix": "+", "visible": True, "order": 1}],
-            "values": [],
-        })))
-        _sections(db, BELAIR, SECTIONS_BELAIR)
-        db.add(User(id="u-belair-admin", school_id=BELAIR, name="Bel-Air Administrator", email="admin@belairhighschoolja.com", password_hash=hash_password("belair1968"), role=SCHOOL_ADMIN, is_active=True))
+    ensure_belair(db)
 
     if db.get(School, MANCHESTER) is None:
         db.add(School(
@@ -626,7 +513,6 @@ def seed(db: Session) -> None:
             ],
         })))
         _sections(db, MANCHESTER, SECTIONS_MANCHESTER)
-        db.add(User(id="u-man-admin", school_id=MANCHESTER, name="Manchester Administrator", email="admin@manchesterhigh.edu.jm", password_hash=hash_password("manchester1968"), role=SCHOOL_ADMIN, is_active=True))
 
     if db.get(School, DEMO) is None:
         db.add(School(
@@ -655,7 +541,9 @@ def seed(db: Session) -> None:
             "statistics": [{"id": "st-d1", "label": "Classes", "value": 24, "visible": True, "order": 1}],
         })))
         _sections(db, DEMO, SECTIONS_DEMO)
-        db.add(User(id="u-demo-admin", school_id=DEMO, name="Demo Administrator", email="admin@demoacademy.edu.jm", password_hash=hash_password("demo1968"), role=SCHOOL_ADMIN, is_active=True))
+
+    ensure_named_user(db, "u-man-admin", MANCHESTER, "Manchester Administrator", "admin@manchesterhigh.edu.jm", "manchester1968", SCHOOL_ADMIN)
+    ensure_named_user(db, "u-demo-admin", DEMO, "Demo Administrator", "admin@demoacademy.edu.jm", "demo1968", SCHOOL_ADMIN)
 
     if db.query(User).filter(User.role == SUPER_ADMIN).first() is None:
         db.add(User(id="u-platform", school_id=None, name="Platform Owner", email="platform@schoolplatform.com", password_hash=hash_password("platform1968"), role=SUPER_ADMIN, is_active=True))
@@ -672,6 +560,24 @@ def seed(db: Session) -> None:
     ensure_principals(db)
 
     db.commit()
+
+
+def ensure_named_user(db: Session, user_id: str, school_id: str | None, name: str, email: str, password: str, role: str) -> None:
+    if school_id is not None and db.get(School, school_id) is None:
+        return
+    if db.get(User, user_id) is not None:
+        return
+    if db.query(User).filter(User.email == email).first() is not None:
+        return
+    db.add(User(
+        id=user_id,
+        school_id=school_id,
+        name=name,
+        email=email,
+        password_hash=hash_password(password),
+        role=role,
+        is_active=True,
+    ))
 
 
 def ensure_principals(db: Session) -> None:

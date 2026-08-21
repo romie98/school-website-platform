@@ -27,16 +27,21 @@ export function PublicLayout() {
     return (
       <div className="flex min-h-svh flex-col items-center justify-center px-6 text-center">
         <h1 className="font-display text-2xl font-bold text-brand">Temporarily unavailable</h1>
-        <p className="mt-2 max-w-md text-sm text-muted">{error || 'This school website is currently offline for maintenance.'}</p>
+        <p className="mt-2 max-w-md text-sm text-muted">{error || "We're temporarily unable to load this content. Please try again shortly."}</p>
         <DevTenantSwitcher />
       </div>
     )
   }
-  if (errorStatus === 404 && !school) {
+  if (!school && (error || errorStatus)) {
+    const notFound = errorStatus === 404
     return (
       <div className="flex min-h-svh flex-col items-center justify-center px-6 text-center">
-        <h1 className="font-display text-2xl font-bold text-brand">School not found</h1>
-        <p className="mt-2 max-w-md text-sm text-muted">This domain is not connected to a school website.</p>
+        <h1 className="font-display text-2xl font-bold text-brand">{notFound ? 'School not found' : 'Unable to load this school website'}</h1>
+        <p className="mt-2 max-w-md text-sm text-muted">
+          {notFound
+            ? 'This domain is not connected to a school website.'
+            : error || 'Please try again shortly.'}
+        </p>
         <DevTenantSwitcher />
       </div>
     )

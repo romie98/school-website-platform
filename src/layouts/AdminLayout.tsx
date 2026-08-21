@@ -56,7 +56,7 @@ const groups = [
 export function AdminLayout() {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  const { school, settings, loading } = useTenant()
+  const { school, settings, loading, error, errorStatus } = useTenant()
   const session = currentSessionUser()
   const principal = isPrincipal()
   const manageUsers = canManageUsers()
@@ -171,6 +171,13 @@ export function AdminLayout() {
         <div className="flex-1 p-4 lg:p-8">
           {waitingForOwnSchool ? (
             <p className="text-sm text-muted">Loading your school…</p>
+          ) : error && !school ? (
+            <div className="rounded-lg bg-white p-6 shadow-[var(--shadow-card)]">
+              <h1 className="font-display text-xl font-bold text-brand">
+                {errorStatus === 503 ? 'Temporarily unavailable' : 'Unable to load school content'}
+              </h1>
+              <p className="mt-2 text-sm text-muted">{error}</p>
+            </div>
           ) : (
             <Outlet />
           )}

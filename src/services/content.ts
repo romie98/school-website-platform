@@ -3,6 +3,7 @@ import type { SiteContent } from '@/types'
 import { upgradeSite } from '@/services/normalize'
 import { hydrateMedia, persistableMedia } from '@/services/mediaService'
 import { api, clearSession, currentSessionUser, getToken, setSession } from '@/services/api'
+import { allowSeedFallback } from '@/config/contentSource'
 
 const AUTH_KEY = 'bahs-admin-auth'
 const AUTH_USER_KEY = 'bahs-admin-user'
@@ -196,19 +197,35 @@ function emptySite(): SiteContent {
 
 export function getContent(): SiteContent {
   if (memory) return memory
-  if (!canUseStorage()) return currentSessionUser()?.school_id ? emptySite() : seed
-  const raw = localStorage.getItem(storageKey())
-  if (!raw) {
-    memory = currentSessionUser()?.school_id ? emptySite() : seed
+  const schoolId = currentSessionUser()?.school_id
+  if (canUseStorage() && schoolId) {
+    const raw = localStorage.getItem(storageKey())
+    if (raw) {
+      try {
+        memory = upgradeSite(JSON.parse(raw) as Partial<SiteContent>)
+        return memory
+      } catch {
+        /* fall through */
+      }
+    }
+  }
+  if (allowSeedFallback() && !schoolId) {
+    if (canUseStorage()) {
+      const raw = localStorage.getItem(storageKey())
+      if (raw) {
+        try {
+          memory = upgradeSite(JSON.parse(raw) as Partial<SiteContent>)
+          return memory
+        } catch {
+          /* fall through */
+        }
+      }
+    }
+    memory = seed
     return memory
   }
-  try {
-    memory = upgradeSite(JSON.parse(raw) as Partial<SiteContent>)
-    return memory
-  } catch {
-    memory = currentSessionUser()?.school_id ? emptySite() : seed
-    return memory
-  }
+  memory = emptySite()
+  return memory
 }
 
 export function clearContentMemory() {
@@ -259,7 +276,7 @@ export function updateContent(patch: Partial<SiteContent>, activity?: string) {
 
 export function resetContent() {
   localStorage.removeItem(storageKey())
-  memory = currentSessionUser()?.school_id ? emptySite() : seed
+  memory = allowSeedFallback() && !currentSessionUser()?.school_id ? seed : emptySite()
   window.dispatchEvent(new CustomEvent('cms-update'))
 }
 

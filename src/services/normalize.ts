@@ -414,7 +414,7 @@ function defaultHomepage(raw: unknown): HomepageContent {
       ]
   return {
     heroEyebrow: str(n.heroEyebrow),
-    heroTitle: str(n.heroTitle, 'Bel-Air High School'),
+    heroTitle: str(n.heroTitle),
     heroTagline: str(n.heroTagline),
     heroImage: str(n.heroImage),
     heroImageMedia: n.heroImageMedia as MediaFile | undefined,
@@ -422,7 +422,7 @@ function defaultHomepage(raw: unknown): HomepageContent {
     primaryButtonUrl: str(n.primaryButtonUrl, '/about'),
     secondaryButtonLabel: str(n.secondaryButtonLabel, 'Admissions'),
     secondaryButtonUrl: str(n.secondaryButtonUrl, '/admissions'),
-    welcomeTitle: str(n.welcomeTitle, 'Welcome to Bel-Air High School'),
+    welcomeTitle: str(n.welcomeTitle, 'Welcome'),
     welcomeBody: Array.isArray(n.welcomeBody) ? (n.welcomeBody as string[]) : [str(n.welcomeBody)],
     welcomeImage: str(n.welcomeImage),
     welcomeImageMedia: n.welcomeImageMedia as MediaFile | undefined,
@@ -441,7 +441,7 @@ function defaultPrincipal(raw: unknown): PrincipalMessage {
     photo: str(n.photo),
     photoMedia: n.photoMedia as MediaFile | undefined,
     excerpt: str(n.excerpt),
-    messageTitle: str(n.messageTitle, 'Welcome to Bel-Air High School'),
+    messageTitle: str(n.messageTitle, 'Welcome'),
     content: str(n.content) || htmlFromParagraphs(paragraphs),
     paragraphs,
     signature: str(n.signature, str(n.name)),
@@ -461,7 +461,7 @@ function defaultContact(raw: unknown): ContactInfo {
     : []
   const emails = Array.isArray(n.email) ? (n.email as string[]) : []
   return {
-    schoolName: str(n.schoolName, 'Bel-Air High School'),
+    schoolName: str(n.schoolName),
     addressLines: Array.isArray(n.addressLines) ? (n.addressLines as string[]) : [],
     phone: Array.isArray(n.phone) ? (n.phone as string[]) : [],
     email: emails,
@@ -476,8 +476,8 @@ function defaultContact(raw: unknown): ContactInfo {
 function defaultBranding(raw: unknown): BrandingSettings {
   const n = asRecord(raw)
   return {
-    schoolName: str(n.schoolName, 'Bel-Air High School'),
-    motto: str(n.motto, 'Unity Through Friendship and Knowledge'),
+    schoolName: str(n.schoolName),
+    motto: str(n.motto),
     mottoTranslation: n.mottoTranslation ? str(n.mottoTranslation) : undefined,
     established: n.established ? str(n.established) : undefined,
     primaryColor: str(n.primaryColor, '#0B3D2E'),

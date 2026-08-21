@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { api, currentSessionUser, rememberDevTenant, storedDevTenant } from '@/services/api'
 import { hydrateFromRemote, getContent, clearContentMemory } from '@/services/content'
 import { seed } from '@/data/seed'
+import { allowSeedFallback } from '@/config/contentSource'
 import { applyTheme } from '@/themes/applyTheme'
 import type { TenantBundle, TenantSchool, TenantSettings, TenantTheme } from '@/types/tenant'
 
@@ -78,24 +79,24 @@ export function TenantProvider({ children }: { children: ReactNode }) {
       const status = typeof err === 'object' && err && 'status' in err ? Number((err as { status: number }).status) : 0
       const message = err instanceof Error ? err.message : 'Unable to load school site'
       setError(message)
-      setErrorStatus(status || null)
-      if (status === 503 || status === 404) {
-        setBundle(null)
+      setErrorStatus(status || 0)
+      if (allowSeedFallback() && status !== 503 && status !== 404) {
+        setBundle((current) => {
+          if (current) return current
+          hydrateFromRemote(seed, { persist: false })
+          return {
+            school: { id: 'local', name: 'Bel-Air High School', slug: 'belair-high', status: 'active', theme: 'classic' },
+            theme: fallbackTheme,
+            settings: { schoolName: 'Bel-Air High School', motto: 'Unity Through Friendship and Knowledge' },
+            features: { news: true, events: true, gallery: true, documents: true },
+            navigation: [],
+            homepage_sections: [],
+            content: getContent(),
+          }
+        })
         return
       }
-      setBundle((current) => {
-        if (current) return current
-        hydrateFromRemote(seed, { persist: false })
-        return {
-          school: { id: 'local', name: 'Bel-Air High School', slug: 'belair-high', status: 'active', theme: 'classic' },
-          theme: fallbackTheme,
-          settings: { schoolName: 'Bel-Air High School', motto: 'Unity Through Friendship and Knowledge' },
-          features: { news: true, events: true, gallery: true, documents: true },
-          navigation: [],
-          homepage_sections: [],
-          content: getContent(),
-        }
-      })
+      setBundle(null)
     } finally {
       setLoading(false)
     }
