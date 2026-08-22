@@ -10,7 +10,7 @@ import { useContent } from '@/hooks/useContent'
 import { photos } from '@/data/images'
 import { eventCategories, formatDate, formatShortDate, paginate } from '@/utils'
 import type { SchoolEvent } from '@/types'
-import { isEventPublic } from '@/services/normalize'
+import { isEventPublic, mediaUrl } from '@/services/normalize'
 import { isAdminAuthenticated } from '@/services/content'
 import { useTenant } from '@/contexts/TenantContext'
 import { isHeritageTheme } from '@/themes/heritage'
@@ -112,7 +112,7 @@ export function EventDetail() {
   const event = events.find((e: SchoolEvent) => e.slug === slug)
   if (!event || !isEventPublic(event, preview)) return <div className="page-wrap section-space"><EmptyState title="Event not found" body="This event may have been removed." /></div>
   const d = formatShortDate(event.date)
-  const hero = event.featuredImage?.url || event.image
+  const hero = mediaUrl(event.featuredImage) || mediaUrl(event.image)
   const heritage = isHeritageTheme(theme)
   return (
     <>

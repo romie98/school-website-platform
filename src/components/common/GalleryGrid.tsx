@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 import type { GalleryItem, GalleryCategory } from '@/types'
 import { FilterTabs, Pagination } from '@/components/common/PageBits'
 import { paginate } from '@/utils'
+import { mediaUrl } from '@/services/normalize'
 
 const cats: Array<'All' | GalleryCategory> = ['All', 'Academic', 'Sports', 'Graduation', 'Clubs', 'Special Events', 'Campus Life']
 
@@ -28,7 +29,7 @@ export function GalleryGrid({ items, showFilters = true }: { items: GalleryItem[
             onClick={() => setActive(item)}
             className="mb-4 block w-full overflow-hidden rounded-lg"
           >
-            <img src={item.src} alt={item.alt} className="w-full object-cover transition hover:brightness-110" loading="lazy" />
+            <img src={mediaUrl(item.src)} alt={item.alt} className="w-full object-cover transition hover:brightness-110" loading="lazy" />
           </button>
         ))}
       </div>
@@ -37,7 +38,7 @@ export function GalleryGrid({ items, showFilters = true }: { items: GalleryItem[
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-brand-dark/90 p-4" role="dialog" aria-modal>
           <button type="button" className="absolute inset-0" aria-label="Close lightbox" onClick={() => setActive(null)} />
           <div className="relative max-h-[90vh] max-w-5xl">
-            <img src={active.src} alt={active.alt} className="max-h-[90vh] rounded-md object-contain" />
+            <img src={mediaUrl(active.src)} alt={active.alt} className="max-h-[90vh] rounded-md object-contain" />
             <p className="mt-2 max-w-3xl text-center text-sm text-white">{active.caption || active.alt}</p>
             <button type="button" onClick={() => setActive(null)} className="absolute -right-2 -top-2 rounded-full bg-gold p-1 text-brand-dark" aria-label="Close">
               <X className="h-5 w-5" />

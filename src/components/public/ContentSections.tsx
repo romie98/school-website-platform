@@ -10,7 +10,7 @@ import { NamedIcon } from '@/components/common/NamedIcon'
 import { useContent } from '@/hooks/useContent'
 import { useTenant } from '@/contexts/TenantContext'
 import { photos } from '@/data/images'
-import { isAnnouncementLive } from '@/services/normalize'
+import { isAnnouncementLive, mediaUrl } from '@/services/normalize'
 import { GoldRule } from '@/components/common/GoldRule'
 import { SchoolCrest } from '@/components/common/SchoolCrest'
 import type { GalleryItem, ResourceItem, StaffMember, Statistic } from '@/types'
@@ -60,7 +60,7 @@ export function QuickLinksSection({ variant = 'default' }: { variant?: string })
 
 export function WelcomeSection({ variant }: { variant: string }) {
   const { homepage, branding } = useContent()
-  const image = homepage.welcomeImageMedia?.url || homepage.welcomeImage || photos.students
+  const image = mediaUrl(homepage.welcomeImageMedia) || mediaUrl(homepage.welcomeImage) || photos.students
   const split = variant === 'split'
   return (
     <section className="section-space">
@@ -85,7 +85,7 @@ export function WelcomeSection({ variant }: { variant: string }) {
 
 export function PrincipalSection({ variant }: { variant: string }) {
   const { principal } = useContent()
-  const photo = principal.photoMedia?.url || principal.photo || photos.principal
+  const photo = mediaUrl(principal.photoMedia) || mediaUrl(principal.photo) || photos.principal
   if (variant === 'asymmetric') {
     return (
       <section className="section-space">
@@ -295,9 +295,9 @@ export function AcademicsSection({ variant = 'default' }: { variant?: string }) 
 export function SchoolLifeSection({ variant = 'default' }: { variant?: string }) {
   const { clubs, sports, gallery } = useContent()
   const items = [
-    { title: 'Sports', href: '/school-life/sports', image: sports[0]?.image || photos.football, body: 'Teams, fixtures and healthy competition.' },
-    { title: 'Clubs & Societies', href: '/school-life/clubs', image: clubs[0]?.image || photos.music, body: 'Interests, leadership and service beyond class.' },
-    { title: 'Student Leadership', href: '/students', image: gallery[0]?.src || photos.assembly, body: 'Opportunities to lead and represent the school.' },
+    { title: 'Sports', href: '/school-life/sports', image: mediaUrl(sports[0]?.image) || photos.football, body: 'Teams, fixtures and healthy competition.' },
+    { title: 'Clubs & Societies', href: '/school-life/clubs', image: mediaUrl(clubs[0]?.image) || photos.music, body: 'Interests, leadership and service beyond class.' },
+    { title: 'Student Leadership', href: '/students', image: mediaUrl(gallery[0]?.src) || photos.assembly, body: 'Opportunities to lead and represent the school.' },
   ]
   if (variant === 'split') {
     const feature = items[0]
@@ -368,7 +368,7 @@ export function GallerySection({ items, variant }: { items: GalleryItem[]; varia
             {shown.map((item, index) => (
               <img
                 key={item.id}
-                src={item.src}
+                src={mediaUrl(item.src)}
                 alt={item.alt}
                 loading="lazy"
                 className={`h-full w-full object-cover ${index === 0 ? 'col-span-2 row-span-2' : ''} ${index === 5 ? 'md:col-span-2' : ''}`}
@@ -551,7 +551,7 @@ export function MottoSection() {
   const motto = branding.motto
   if (!motto) return null
   const translation = branding.mottoTranslation
-  const crest = branding.crestMedia?.url || branding.crestUrl || school?.logoUrl
+  const crest = mediaUrl(branding.crestMedia) || mediaUrl(branding.crestUrl) || mediaUrl(school?.logoUrl)
   return (
     <section className="relative isolate overflow-hidden bg-brand py-24 text-center">
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.07]">

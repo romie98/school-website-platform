@@ -63,8 +63,8 @@ export function NewsList() {
               {paged.items.map((article) => (
                 <tr key={article.id} className="border-b border-brand/10">
                   <td className="px-3 py-2">
-                    {mediaUrl(article.featuredImage) || article.image ? (
-                      <img src={mediaUrl(article.featuredImage) || article.image} alt="" className="h-12 w-16 rounded object-cover" />
+                    {mediaUrl(article.featuredImage) || mediaUrl(article.image) ? (
+                      <img src={mediaUrl(article.featuredImage) || mediaUrl(article.image)} alt="" className="h-12 w-16 rounded object-cover" />
                     ) : <div className="h-12 w-16 rounded bg-cream" />}
                   </td>
                   <td className="max-w-xs break-words px-3 py-2 font-medium text-brand">{article.title}</td>

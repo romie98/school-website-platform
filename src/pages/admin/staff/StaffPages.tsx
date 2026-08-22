@@ -7,7 +7,7 @@ import { ImageUploader } from '@/components/admin/ImageUploader'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
 import { useContent } from '@/hooks/useContent'
 import { departmentService, staffService, writeMessage, conflictText } from '@/services/collections'
-import { nowIso } from '@/services/normalize'
+import { mediaUrl, nowIso } from '@/services/normalize'
 import { useToast } from '@/components/admin/Toast'
 import { deleteConfirmCopy, submitLabel } from '@/services/approvals'
 
@@ -73,7 +73,7 @@ export function StaffList() {
             <tbody>
               {paged.items.map((person) => (
                 <tr key={person.id} className="border-b border-brand/10">
-                  <td className="px-3 py-2">{person.photo ? <img src={person.photo} alt="" className="h-10 w-10 rounded-full object-cover" /> : <div className="h-10 w-10 rounded-full bg-cream" />}</td>
+                  <td className="px-3 py-2">{mediaUrl(person.photoMedia) || mediaUrl(person.photo) ? <img src={mediaUrl(person.photoMedia) || mediaUrl(person.photo)} alt="" className="h-10 w-10 rounded-full object-cover" /> : <div className="h-10 w-10 rounded-full bg-cream" />}</td>
                   <td className="max-w-[220px] break-words px-3 py-2 font-medium text-brand">{person.name}</td>
                   <td className="max-w-[180px] break-words px-3 py-2">{person.role}</td>
                   <td className="px-3 py-2">{person.department}</td>
@@ -175,7 +175,7 @@ export function StaffView() {
   return (
     <EditorShell title={person.name} backTo="/admin/staff" actions={<button type="button" className="rounded-md bg-gold px-4 py-2 text-sm font-semibold text-brand-dark" onClick={() => navigate(`/admin/staff/${person.id}/edit`)}>Edit</button>}>
       <div className="flex gap-6 rounded-lg bg-white p-6">
-        {person.photo && <img src={person.photo} alt={person.name} className="h-40 w-32 rounded object-cover" />}
+        {(mediaUrl(person.photoMedia) || mediaUrl(person.photo)) && <img src={mediaUrl(person.photoMedia) || mediaUrl(person.photo)} alt={person.name} className="h-40 w-32 rounded object-cover" />}
         <div>
           <p className="font-medium text-gold-dark">{person.role}</p>
           <p className="text-sm text-muted">{person.department} · {person.staffType}</p>

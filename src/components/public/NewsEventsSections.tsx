@@ -6,6 +6,7 @@ import { formatDate, formatShortDate } from '@/utils'
 import { photos } from '@/data/images'
 import { useContent } from '@/hooks/useContent'
 import type { NewsArticle, SchoolEvent } from '@/types'
+import { mediaUrl } from '@/services/normalize'
 
 export function NewsSection({ articles, variant }: { articles: NewsArticle[]; variant: string }) {
   const { branding } = useContent()
@@ -35,7 +36,7 @@ export function NewsSection({ articles, variant }: { articles: NewsArticle[]; va
         ) : variant === 'editorial' && items[0] ? (
           <div className="grid gap-8 lg:grid-cols-[1.4fr_0.8fr]">
             <Link to={`/news/${items[0].slug}`} className="group relative isolate min-h-[22rem] overflow-hidden">
-              <img src={items[0].featuredImage?.url || items[0].image || photos.assembly} alt={items[0].imageAlt || items[0].title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <img src={mediaUrl(items[0].featuredImage) || mediaUrl(items[0].image) || photos.assembly} alt={items[0].imageAlt || items[0].title} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-brand via-brand/40 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-gold">{items[0].category} · {formatDate(items[0].date)}</p>

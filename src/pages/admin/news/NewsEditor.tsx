@@ -5,7 +5,7 @@ import { EditorShell, Field, adminInput } from '@/components/admin/AdminChrome'
 import { ImageUploader } from '@/components/admin/ImageUploader'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
 import { newsService, uniqueSlug, writeMessage, conflictText } from '@/services/collections'
-import { nowIso } from '@/services/normalize'
+import { mediaUrl, nowIso } from '@/services/normalize'
 import { useToast } from '@/components/admin/Toast'
 import { storeMediaFile } from '@/services/mediaService'
 import { mediaLibraryService } from '@/services/collections'
@@ -201,7 +201,7 @@ function ArticleGallery({ items, onChange }: { items: MediaFile[]; onChange: (it
       <div className="mt-3 grid grid-cols-2 gap-2">
         {items.map((item, index) => (
           <div key={item.id} className="rounded border border-brand/10 p-2">
-            <img src={item.url} alt={item.alt} className="h-20 w-full object-cover" />
+            <img src={mediaUrl(item)} alt={item.alt} className="h-20 w-full object-cover" />
             <input className="mt-1 w-full rounded border border-brand/15 px-2 py-1 text-xs" placeholder="Caption" value={item.caption ?? ''} onChange={(e) => onChange(items.map((g, i) => i === index ? { ...g, caption: e.target.value } : g))} />
             <div className="mt-1 flex justify-between text-xs">
               <button type="button" disabled={index === 0} onClick={() => {
@@ -232,7 +232,7 @@ export function NewsView() {
       </>
     }>
       <div className="rounded-lg bg-white p-6 shadow-[var(--shadow-card)]">
-        {(article.featuredImage?.url || article.image) && <img src={article.featuredImage?.url || article.image} alt={article.imageAlt} className="mb-4 max-h-80 w-full rounded object-cover" />}
+        {(mediaUrl(article.featuredImage) || mediaUrl(article.image)) && <img src={mediaUrl(article.featuredImage) || mediaUrl(article.image)} alt={article.imageAlt} className="mb-4 max-h-80 w-full rounded object-cover" />}
         <p className="text-sm text-muted">{article.category} · {article.status} · {article.author}</p>
         <p className="mt-3 text-muted">{article.excerpt}</p>
         <div className="cms-prose mt-6" dangerouslySetInnerHTML={{ __html: article.content }} />

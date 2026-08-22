@@ -5,6 +5,7 @@ import { formatDate, formatShortDate } from '@/utils'
 import { NamedIcon } from '@/components/common/NamedIcon'
 import { isHeritageTheme } from '@/themes/heritage'
 import { useTenant } from '@/contexts/TenantContext'
+import { mediaUrl } from '@/services/normalize'
 
 export function NewsCard({ article, featured = false }: { article: NewsArticle; featured?: boolean }) {
   const { theme } = useTenant()
@@ -12,7 +13,7 @@ export function NewsCard({ article, featured = false }: { article: NewsArticle; 
   return (
     <article className={`group overflow-hidden bg-white ${heritage ? 'border border-gold/35' : 'rounded-lg border border-brand/10 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-md'} ${featured ? 'md:grid md:grid-cols-2' : ''}`}>
       <div className={`overflow-hidden ${featured ? 'min-h-56' : 'h-44'}`}>
-        <img src={article.featuredImage?.url || article.image} alt={article.imageAlt || article.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
+        <img src={mediaUrl(article.featuredImage) || mediaUrl(article.image)} alt={article.imageAlt || article.title} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" />
       </div>
       <div className="flex flex-col p-5">
         <p className={`text-xs font-semibold uppercase tracking-wider ${heritage ? 'tracking-[0.18em] text-gold-dark' : 'text-brand-mid'}`}>{article.category}</p>
@@ -69,7 +70,7 @@ export function StaffCard({ person }: { person: StaffMember }) {
   return (
     <article className="overflow-hidden rounded-lg border border-brand/10 bg-white text-center shadow-[var(--shadow-card)]">
       <div className="aspect-[4/5] overflow-hidden bg-brand-soft">
-        <img src={person.photoMedia?.url || person.photo} alt={`Portrait of ${person.name}`} className="h-full w-full object-cover" loading="lazy" />
+        <img src={mediaUrl(person.photoMedia) || mediaUrl(person.photo)} alt={`Portrait of ${person.name}`} className="h-full w-full object-cover" loading="lazy" />
       </div>
       <div className="p-4">
         <h3 className="break-words font-display text-base font-bold text-brand">{person.name}</h3>
@@ -97,7 +98,7 @@ export function DepartmentCard({ department }: { department: Department }) {
       className="group overflow-hidden rounded-lg border border-brand/10 bg-white shadow-[var(--shadow-card)] transition hover:-translate-y-0.5"
     >
       <div className="h-36 overflow-hidden">
-        <img src={department.imageMedia?.url || department.image} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+        <img src={mediaUrl(department.imageMedia) || mediaUrl(department.image)} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
       </div>
       <div className="p-5">
         <h3 className="font-display text-lg font-bold text-brand">{department.name}</h3>
@@ -125,7 +126,7 @@ export function ResourceCard({ resource }: { resource: ResourceItem }) {
         </div>
       </div>
       <a
-        href={resource.file?.url || resource.href}
+        href={mediaUrl(resource.file) || mediaUrl(resource.href)}
         className="inline-flex items-center justify-center gap-2 rounded-md bg-gold px-4 py-2 text-sm font-semibold text-brand-dark"
       >
         <Download className="h-4 w-4" /> Download

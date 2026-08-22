@@ -7,6 +7,7 @@ import { Breadcrumbs } from '@/components/common/Breadcrumbs'
 import { GalleryGrid } from '@/components/common/GalleryGrid'
 import { useContent } from '@/hooks/useContent'
 import { photos } from '@/data/images'
+import { mediaUrl } from '@/services/normalize'
 import { EmptyState } from '@/components/common/PageBits'
 
 export function Gallery() {
@@ -17,7 +18,7 @@ export function Gallery() {
       return published.map((a) => ({
         slug: a.slug,
         name: a.title,
-        cover: a.cover?.url || a.images[0]?.src || photos.campus,
+        cover: mediaUrl(a.cover) || mediaUrl(a.images[0]?.src) || photos.campus,
         count: a.images.length,
       }))
     }
@@ -25,7 +26,7 @@ export function Gallery() {
     gallery.forEach((g) => {
       const current = map.get(g.albumSlug)
       if (current) current.count += 1
-      else map.set(g.albumSlug, { slug: g.albumSlug, name: g.album, cover: g.src, count: 1 })
+      else map.set(g.albumSlug, { slug: g.albumSlug, name: g.album, cover: mediaUrl(g.src), count: 1 })
     })
     return [...map.values()]
   }, [published, gallery])

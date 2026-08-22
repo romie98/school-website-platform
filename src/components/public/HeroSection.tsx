@@ -5,16 +5,17 @@ import { useTenant } from '@/contexts/TenantContext'
 import { SchoolCrest } from '@/components/common/SchoolCrest'
 import { GoldRule } from '@/components/common/GoldRule'
 import { photos } from '@/data/images'
+import { mediaUrl } from '@/services/normalize'
 
 export function HeroSection({ variant }: { variant: string }) {
   const { homepage, branding } = useContent()
   const { school } = useTenant()
   const name = homepage.heroTitle || school?.name || 'Welcome'
-  const image = homepage.heroImageMedia?.url || homepage.heroImage || photos.hero
-  const welcome = homepage.welcomeImageMedia?.url || homepage.welcomeImage || photos.campus
+  const image = mediaUrl(homepage.heroImageMedia) || mediaUrl(homepage.heroImage) || photos.hero
+  const welcome = mediaUrl(homepage.welcomeImageMedia) || mediaUrl(homepage.welcomeImage) || photos.campus
   const slides = [...new Set([image, welcome, photos.assembly].filter(Boolean))]
   const [index, setIndex] = useState(0)
-  const crest = branding.crestMedia?.url || branding.crestUrl || school?.logoUrl
+  const crest = mediaUrl(branding.crestMedia) || mediaUrl(branding.crestUrl) || mediaUrl(school?.logoUrl)
 
   useEffect(() => {
     if (variant !== 'slideshow' || slides.length < 2) return

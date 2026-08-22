@@ -1,4 +1,5 @@
 import type { TenantTheme } from '@/types/tenant'
+import { mediaUrl } from '@/services/normalize'
 
 const FONT_QUERY: Record<string, string> = {
   Inter: 'Inter:wght@400;500;600;700',
@@ -119,7 +120,7 @@ export function applyTheme(theme: TenantTheme | null, extras?: { faviconUrl?: st
   root.dataset.footer = theme.footerStyle
   document.body.style.fontFamily = `var(--font-sans)`
   loadFonts(theme.headingFont, theme.bodyFont)
-  setFavicon(theme.faviconUrl || extras?.faviconUrl)
+  setFavicon(mediaUrl(theme.faviconUrl) || mediaUrl(extras?.faviconUrl))
   const themeColor = document.querySelector('meta[name="theme-color"]')
   if (themeColor) themeColor.setAttribute('content', primary)
   if (extras?.schoolName) {

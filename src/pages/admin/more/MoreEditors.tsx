@@ -9,7 +9,7 @@ import { useContent } from '@/hooks/useContent'
 import { useTenant } from '@/contexts/TenantContext'
 import { SECTION_CATALOG, variantsFor } from '@/components/public/sectionCatalog'
 import { albumService, clubService, documentService, homepageService, mediaLibraryService, principalService, programmeService, settingsService, sportService, usersService, writeMessage, conflictText } from '@/services/collections'
-import { nowIso } from '@/services/normalize'
+import { mediaUrl, nowIso } from '@/services/normalize'
 import { slugify, formatDate } from '@/utils'
 import { useToast } from '@/components/admin/Toast'
 import { canManageUsers, isPrincipal, isSchoolAdmin } from '@/services/api'
@@ -256,7 +256,7 @@ export function AlbumList() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {albums.map((a) => (
             <article key={a.id} className="overflow-hidden rounded-lg bg-white shadow-[var(--shadow-card)]">
-              {a.cover?.url || a.images[0]?.src ? <img src={a.cover?.url || a.images[0]?.src} alt="" className="h-36 w-full object-cover" /> : <div className="h-36 bg-cream" />}
+              {mediaUrl(a.cover) || mediaUrl(a.images[0]?.src) ? <img src={mediaUrl(a.cover) || mediaUrl(a.images[0]?.src)} alt="" className="h-36 w-full object-cover" /> : <div className="h-36 bg-cream" />}
               <div className="flex items-center justify-between p-3">
                 <div>
                   <p className="font-medium text-brand">{a.title}</p>
@@ -326,7 +326,7 @@ export function AlbumEditor() {
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {form.images.map((img, i) => (
               <div key={img.id} className="rounded border p-2">
-                <img src={img.src} alt={img.alt} className="h-24 w-full object-cover" />
+                <img src={mediaUrl(img.src)} alt={img.alt} className="h-24 w-full object-cover" />
                 <input className="mt-1 w-full text-xs" placeholder="Caption" value={img.caption ?? ''} onChange={(e) => set({ images: form.images.map((g, idx) => idx === i ? { ...g, caption: e.target.value, alt: e.target.value || g.alt } : g) })} />
                 <button type="button" className="text-xs text-red-700" onClick={() => set({ images: form.images.filter((g) => g.id !== img.id) })}>Delete</button>
               </div>
@@ -591,7 +591,7 @@ export function MediaLibraryPage() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
           {paged.items.map((m) => (
             <article key={m.id} className="rounded-lg bg-white p-2 shadow-[var(--shadow-card)]">
-              {m.kind === 'image' ? <img src={m.url} alt={m.alt} className="h-24 w-full rounded object-cover" loading="lazy" /> : <div className="flex h-24 items-center justify-center bg-cream text-xs">{m.mimeType}</div>}
+              {m.kind === 'image' ? <img src={mediaUrl(m)} alt={m.alt} className="h-24 w-full rounded object-cover" loading="lazy" /> : <div className="flex h-24 items-center justify-center bg-cream text-xs">{m.mimeType}</div>}
               <p className="mt-1 truncate text-xs">{m.name}</p>
               <button type="button" className="text-xs text-red-700" onClick={() => setDeleteId(m.id)}>Delete</button>
             </article>

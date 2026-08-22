@@ -1,4 +1,5 @@
 import { useTenant } from '@/contexts/TenantContext'
+import { mediaUrl } from '@/services/normalize'
 import { isHeritageTheme } from '@/themes/heritage'
 
 interface SchoolCrestProps {
@@ -23,8 +24,9 @@ function HeritageCrest({ className, title }: { className: string; title: string 
 
 export function SchoolCrest({ className = 'h-16 w-16', title = 'School crest', src }: SchoolCrestProps) {
   const { theme } = useTenant()
-  if (src) {
-    return <img src={src} alt={title} className={`${className} object-contain`} />
+  const resolved = mediaUrl(src)
+  if (resolved) {
+    return <img src={resolved} alt={title} className={`${className} object-contain`} />
   }
   if (isHeritageTheme(theme)) {
     return <HeritageCrest className={className} title={title} />

@@ -6,6 +6,7 @@ import { approvalApi, formatWhen, isPrincipal, type ChangeAction, type ChangeSta
 import { conflictText } from '@/services/collections'
 import { ImageUploader } from '@/components/admin/ImageUploader'
 import { RichTextEditor } from '@/components/admin/RichTextEditor'
+import { mediaUrl } from '@/services/normalize'
 
 const TABS: { id: ChangeStatus; label: string }[] = [
   { id: 'pending', label: 'Pending' },
@@ -26,9 +27,9 @@ function isImageValue(key: string, value: unknown) {
 }
 
 function mediaSrc(value: unknown): string | null {
-  if (typeof value === 'string' && value) return value
+  if (typeof value === 'string' && value) return mediaUrl(value) || null
   if (value && typeof value === 'object' && 'url' in value && typeof (value as { url: unknown }).url === 'string') {
-    return (value as { url: string }).url
+    return mediaUrl((value as { url: string }).url) || null
   }
   return null
 }

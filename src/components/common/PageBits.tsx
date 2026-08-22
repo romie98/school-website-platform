@@ -1,6 +1,7 @@
 import { TenantLink as Link } from '@/components/common/TenantLink'
 import { Search } from 'lucide-react'
 import { useTenant } from '@/contexts/TenantContext'
+import { mediaUrl } from '@/services/normalize'
 import { isHeritageTheme } from '@/themes/heritage'
 import { GoldRule } from '@/components/common/GoldRule'
 import { Breadcrumbs } from '@/components/common/Breadcrumbs'
@@ -150,10 +151,11 @@ export function PageHero({
   crumbs?: { label: string; href?: string }[]
 }) {
   const { theme } = useTenant()
+  const src = mediaUrl(image)
   if (isHeritageTheme(theme)) {
     return (
       <section className="relative isolate min-h-[220px] overflow-hidden md:min-h-[280px]">
-        <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={src} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-brand/88" />
         <div className="page-wrap relative flex min-h-[220px] flex-col justify-end py-10 md:min-h-[280px] md:py-14">
           <h1 className="max-w-4xl break-words font-display text-3xl font-semibold tracking-[0.08em] text-white md:text-5xl">{title}</h1>
@@ -170,7 +172,7 @@ export function PageHero({
   }
   return (
     <section className="relative isolate min-h-[240px] overflow-hidden md:min-h-[300px]">
-      <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+      <img src={src} alt="" className="absolute inset-0 h-full w-full object-cover" />
       <div className="absolute inset-0 bg-brand/80" />
       <div className="page-wrap relative flex min-h-[240px] flex-col justify-end py-12 md:min-h-[300px]">
         <h1 className="max-w-4xl break-words font-display text-3xl font-bold text-white md:text-5xl">{title}</h1>

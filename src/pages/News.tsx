@@ -11,7 +11,7 @@ import { useContent } from '@/hooks/useContent'
 import { useTenant } from '@/contexts/TenantContext'
 import { photos } from '@/data/images'
 import { formatDate, paginate, newsCategories } from '@/utils'
-import { isNewsPublic } from '@/services/normalize'
+import { isNewsPublic, mediaUrl } from '@/services/normalize'
 import { isAdminAuthenticated } from '@/services/content'
 import { isHeritageTheme } from '@/themes/heritage'
 
@@ -70,7 +70,7 @@ export function NewsArticlePage() {
   }
   const related = news.filter((n) => n.id !== article.id && n.category === article.category && isNewsPublic(n)).slice(0, 3)
   const share = typeof window !== 'undefined' ? window.location.href : ''
-  const hero = article.featuredImage?.url || article.image
+  const hero = mediaUrl(article.featuredImage) || mediaUrl(article.image)
   const heritage = isHeritageTheme(theme)
 
   if (heritage) {
@@ -101,7 +101,7 @@ export function NewsArticlePage() {
             </div>
             {article.gallery && article.gallery.length > 0 && (
               <div className="mt-12 grid gap-3 sm:grid-cols-3">
-                {article.gallery.map((item) => <img key={item.id} src={item.url} alt={item.alt || item.caption || ''} className="h-48 w-full object-cover" />)}
+                {article.gallery.map((item) => <img key={item.id} src={mediaUrl(item)} alt={item.alt || item.caption || ''} className="h-48 w-full object-cover" />)}
               </div>
             )}
             {related.length > 0 && (
@@ -148,7 +148,7 @@ export function NewsArticlePage() {
           </div>
           {article.gallery && article.gallery.length > 0 && (
             <div className="mt-12 grid gap-3 sm:grid-cols-3">
-              {article.gallery.map((item) => <img key={item.id} src={item.url} alt={item.alt || item.caption || ''} className="h-48 w-full rounded-lg object-cover" />)}
+              {article.gallery.map((item) => <img key={item.id} src={mediaUrl(item)} alt={item.alt || item.caption || ''} className="h-48 w-full rounded-lg object-cover" />)}
             </div>
           )}
           {related.length > 0 && (

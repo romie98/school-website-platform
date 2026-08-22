@@ -6,6 +6,7 @@ import { storeMediaFile, validateImageFile } from '@/services/mediaService'
 import { useContent } from '@/hooks/useContent'
 import { api, getToken } from '@/services/api'
 import { useToast } from '@/components/admin/Toast'
+import { mediaUrl } from '@/services/normalize'
 
 interface ImageUploaderProps {
   value?: MediaFile | string | null
@@ -22,7 +23,7 @@ export function ImageUploader({ value, alt, onChange, onAltChange, label = 'Imag
   const [busy, setBusy] = useState(false)
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [drag, setDrag] = useState(false)
-  const preview = typeof value === 'string' ? value : value?.url
+  const preview = mediaUrl(value)
 
   const handleFiles = async (files: FileList | File[]) => {
     const file = files[0]
@@ -126,7 +127,7 @@ export function MediaLibraryModal({
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
             {items.map((item) => (
               <button key={item.id} type="button" className="overflow-hidden rounded-md border border-brand/10 text-left hover:border-gold" onClick={() => onSelect(item)}>
-                {item.kind === 'image' ? <img src={item.url} alt={item.alt} className="h-24 w-full object-cover" /> : <div className="flex h-24 items-center justify-center bg-cream text-xs">{item.mimeType}</div>}
+                {item.kind === 'image' ? <img src={mediaUrl(item)} alt={item.alt} className="h-24 w-full object-cover" /> : <div className="flex h-24 items-center justify-center bg-cream text-xs">{item.mimeType}</div>}
                 <p className="truncate px-2 py-1 text-xs">{item.name}</p>
               </button>
             ))}

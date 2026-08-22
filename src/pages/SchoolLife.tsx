@@ -6,6 +6,7 @@ import { Breadcrumbs } from '@/components/common/Breadcrumbs'
 import { SectionHeader } from '@/components/common/SectionHeader'
 import { useContent } from '@/hooks/useContent'
 import { photos } from '@/data/images'
+import { mediaUrl } from '@/services/normalize'
 
 export function SchoolLife() {
   const { clubs, sports, houses, branding } = useContent()
@@ -51,7 +52,7 @@ export function Clubs() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((club) => (
             <Link key={club.id} to={`/school-life/clubs/${club.slug}`} className="overflow-hidden rounded-lg border border-brand/10 bg-white shadow-[var(--shadow-card)]">
-              <img src={club.imageMedia?.url || club.image} alt="" className="h-40 w-full object-cover" />
+              <img src={mediaUrl(club.imageMedia) || mediaUrl(club.image)} alt="" className="h-40 w-full object-cover" />
               <div className="p-5">
                 <h2 className="font-display text-lg font-bold text-brand">{club.name}</h2>
                 <p className="mt-2 line-clamp-3 text-sm text-muted">{club.description.replace(/<[^>]+>/g, ' ')}</p>
@@ -85,7 +86,7 @@ export function ClubDetail() {
           <ul className="mt-4 list-disc pl-5 text-muted">{club.achievements.map((a) => <li key={a}>{a}</li>)}</ul>
         </section>
         <div className="mt-8 grid gap-3 sm:grid-cols-2">
-          {(club.gallery.length ? club.gallery.map((g) => g.url) : club.photos).map((src) => <img key={src} src={src} alt="" className="h-48 w-full rounded-lg object-cover" />)}
+          {(club.gallery.length ? club.gallery.map((g) => g.url) : club.photos).map((src) => <img key={src} src={mediaUrl(src)} alt="" className="h-48 w-full rounded-lg object-cover" />)}
         </div>
       </div>
     </>
@@ -104,7 +105,7 @@ export function Sports() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((s) => (
             <Link key={s.id} to={`/school-life/sports/${s.slug}`} className="group relative overflow-hidden rounded-lg">
-              <img src={s.imageMedia?.url || s.image} alt="" className="h-56 w-full object-cover transition group-hover:scale-105" />
+              <img src={mediaUrl(s.imageMedia) || mediaUrl(s.image)} alt="" className="h-56 w-full object-cover transition group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-brand via-brand/30 to-transparent" />
               <span className="absolute bottom-4 left-4 font-display text-xl font-bold text-white">{s.name}</span>
             </Link>
