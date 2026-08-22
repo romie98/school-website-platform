@@ -19,6 +19,7 @@ import type {
   StaffMember,
   Statistic,
 } from '@/types'
+import { API_BASE_URL } from '@/config/api'
 import { slugify } from '@/utils'
 
 export function nowIso() {
@@ -40,8 +41,15 @@ export function toMedia(url: string, alt = '', kind: MediaFile['kind'] = 'image'
 
 export function mediaUrl(value?: MediaFile | string | null) {
   if (!value) return ''
-  if (typeof value === 'string') return value
-  return value.url || ''
+
+  const raw = typeof value === 'string' ? value : value.url || ''
+  if (!raw) return ''
+
+  if (raw.startsWith('/api/')) {
+    return `${API_BASE_URL}${raw}`
+  }
+
+  return raw
 }
 
 export function htmlFromParagraphs(paragraphs: string[] | string | undefined) {
