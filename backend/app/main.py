@@ -13,6 +13,7 @@ from app.api.auth import router as auth_router
 from app.api.health import router as health_router
 from app.api.platform.schools import router as platform_router
 from app.api.platform.system import ops_router, router as platform_system_router
+from app.api.public.media import router as public_media_router
 from app.api.public.site import router as public_router
 from app.core.config import get_settings
 from app.core.errors import safe_http_exception_handler, unhandled_exception_handler, validation_handler
@@ -57,4 +58,7 @@ app.include_router(audit_router)
 app.include_router(platform_router)
 app.include_router(platform_system_router)
 app.include_router(ops_router)
-app.mount("/api/public/media", StaticFiles(directory=settings.storage_dir), name="media")
+if (settings.storage_provider or "local").strip().lower() == "r2":
+    app.include_router(public_media_router)
+else:
+    app.mount("/api/public/media", StaticFiles(directory=settings.storage_dir), name="media")

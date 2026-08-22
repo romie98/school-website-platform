@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     storage_provider: str = "local"
     storage_bucket: str = ""
     storage_dir: str = "./storage"
+    r2_endpoint: str = ""
+    r2_access_key_id: str = ""
+    r2_secret_access_key: str = ""
+    r2_public_url: str = ""
     media_trash_dir: str = "./media-trash"
     jwt_algorithm: str = "HS256"
     access_token_minutes: int = 60 * 12

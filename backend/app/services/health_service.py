@@ -22,9 +22,25 @@ def check_database() -> dict[str, str]:
         return {"status": STATUS_UNHEALTHY}
 
 
+def _check_r2_storage() -> dict[str, str]:
+    from app.services.media_service import _r2_client, r2_configured
+
+    if not r2_configured():
+        return {"status": STATUS_UNHEALTHY}
+    try:
+        settings = get_settings()
+        _r2_client().head_bucket(Bucket=settings.storage_bucket)
+        return {"status": STATUS_HEALTHY}
+    except Exception:
+        log.error("Storage health check failed", exc_info=True)
+        return {"status": STATUS_UNHEALTHY}
+
+
 def check_storage() -> dict[str, str]:
     settings = get_settings()
     provider = (settings.storage_provider or "local").strip().lower()
+    if provider == "r2":
+        return _check_r2_storage()
     if provider not in {"local", "filesystem", ""}:
         bucket = (settings.storage_bucket or "").strip()
         if not bucket:
